@@ -1,0 +1,33 @@
+[INCLUDES]
+before = paths-fedora.conf
+
+[DEFAULT]
+bantime  = 100
+maxretry = 3
+ignoreip = 127.0.0.1/8 ::1 168.197.25.31
+
+[asterisk-iptables]
+
+enabled  = true
+filter   = asterisk
+action   = iptables-allports[name=ASTERISK, protocol=all]
+           sendmail-whois[name=ASTERISK, dest=, sender=seuemail@seuprovedor.com.br]
+logpath  = /var/log/asterisk/messages
+maxretry = 4
+bantime = 86400
+
+[asterisk-security-iptables]
+enabled  = true
+filter   = asterisk-security
+logpath  = /var/log/asterisk/security
+maxretry = 3
+bantime = 864000
+findtime = 3600
+action   = iptables-allports[name=ASTERISK-security, protocol=all]
+           sendmail-whois[name=ASTERISK-security, dest=root, sender=fail2ban@asterisk]
+ignoreip = 127.0.0.1/8
+
+[sshd]
+enabled = true
+filter = sshd
+logpath = %(sshd_log)s
